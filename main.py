@@ -20,6 +20,8 @@ def main():
 
         player.draw_player()
 
+        draw_grid(screen)
+
         pygame.display.flip()
 
         clock.tick(60)  # limits FPS to 60
