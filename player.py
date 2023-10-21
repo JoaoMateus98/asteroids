@@ -1,6 +1,7 @@
 import math
 import pygame
 from acceleration import Acceleration
+from bullet import Bullet
 
 
 class Player:
@@ -17,7 +18,11 @@ class Player:
         self.rotation_radians_during_acceleration = self.rotation_radians
         self.velocity = 0
 
+        self.was_firing = False
+        self.fired_bullets = []
+
     def draw_player(self) -> pygame.Rect:
+
         Player.__movement_controller(self)
         player_width = 2
 
@@ -41,6 +46,7 @@ class Player:
 
     def __movement_controller(self):
         # normalize the radians
+
         if self.rotation_radians > (math.pi * 2):
             self.rotation_radians = 0
         if self.rotation_radians < 0:
@@ -48,11 +54,32 @@ class Player:
 
         keys = pygame.key.get_pressed()
 
+        Player.__bullet_controller(self, keys)
         Player.__rotate_player(self, keys)
         Player.__move_forward(self, keys)
 
+    def __bullet_controller(self, keys):
+        for index, bullet in enumerate(self.fired_bullets):
+            bullet.fire()
+            if (bullet.current_pos["x"] > self.screen.get_width() or bullet.current_pos["x"] < 0 or
+                    bullet.current_pos["y"] > self.screen.get_height() or bullet.current_pos["y"] < 0):
+                self.fired_bullets.pop(index)
+
+        if not self.was_firing:
+            if keys[pygame.K_SPACE]:
+                Player.__fire(self)
+
+        if keys[pygame.K_SPACE]:
+            self.was_firing = True
+        else:
+            self.was_firing = False
+
+    def __fire(self):
+        bullet = Bullet(self.screen, self.head, self.rotation_radians)
+        self.fired_bullets.append(bullet)
+
     def __rotate_player(self, keys):
-        rotation_speed = 5
+        rotation_speed = 3.5
 
         if keys[pygame.K_RIGHT]:
             self.rotation_radians = self.rotation_radians - math.radians(rotation_speed)
