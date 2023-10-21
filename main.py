@@ -4,7 +4,7 @@ from player import Player
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((1280, 720))
+    screen = pygame.display.set_mode((1980, 1020))
     clock = pygame.time.Clock()
     running = True
 
