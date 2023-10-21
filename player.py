@@ -15,10 +15,23 @@ class Player:
 
     def draw_player(self) -> pygame.Rect:
         Player.__movement_controller(self)
-
         player_width = 2
-        player = pygame.draw.line(surface=self.screen, color="white", start_pos=(self.center["x"], self.center["y"]),
-                                  end_pos=(self.head["x"], self.head["y"]), width=player_width)
+
+        player_left_degrees = self.rotation_degrees + ((5 * math.pi) / 6)
+        player_right_degrees = self.rotation_degrees + ((7 * math.pi) / 6)
+
+        player_left = {"x": self.center["x"] + (math.cos(player_left_degrees) * self.size),
+                       "y": self.center["y"] + (-1 * (math.sin(player_left_degrees) * self.size))}
+
+        player_right = {"x": self.center["x"] + (math.cos(player_right_degrees) * self.size),
+                        "y": self.center["y"] + (-1 * (math.sin(player_right_degrees) * self.size))}
+
+        player = pygame.draw.lines(self.screen, color="white", closed=True,
+                                   points=[(player_left["x"], player_left["y"]),
+                                           (self.center["x"], self.center["y"]),
+                                           (player_right["x"], player_right["y"]),
+                                           (self.head["x"], self.head["y"])],
+                                   width=player_width)
 
         return player
 

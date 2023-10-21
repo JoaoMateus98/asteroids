@@ -8,7 +8,7 @@ def main():
     clock = pygame.time.Clock()
     running = True
 
-    player = Player(screen=screen, size=50)
+    player = Player(screen=screen, size=25)
 
     while running:
         for event in pygame.event.get():
